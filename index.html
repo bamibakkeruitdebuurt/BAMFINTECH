@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>FINCHAT AI</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/lib/languages/python.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/a11y-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <style>
+    :root {
+      --background-color: #f8f9fa;
+      --text-color: #000000;
+      --navbar-background-color: #343a40;
+      --navbar-text-color: #ffffff;
+      --dashboard-background-color: #ffffff;
+      --dashboard-text-color: #000000;
+      --card-background-color: #f8f9fa;
+      --card-text-color: #000000;
+      --chatbox-background-color: #ffffff;
+      --chatbox-border-color: #ccc;
+      --user-message-background-color: #007bff;
+      --user-message-text-color: #ffffff;
+      --bot-message-background-color: #e9ecef;
+      --bot-message-text-color: #000000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --background-color: #121212;
+        --text-color: #ffffff;
+        --navbar-background-color: #1f1f1f;
+        --navbar-text-color: #ffffff;
+        --dashboard-background-color: #1f1f1f;
+        --dashboard-text-color: #ffffff;
+        --card-background-color: #333333;
+        --card-text-color: #ffffff;
+        --chatbox-background-color: #333333;
+        --chatbox-border-color: #555555;
+        --user-message-background-color: #007bff;
+        --user-message-text-color: #ffffff;
+        --bot-message-background-color: #444444;
+        --bot-message-text-color: #ffffff;
+      }
+    }
+
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+    }
+
+    .navbar {
+      background-color: var(--navbar-background-color);
+    }
+
+    .navbar-brand,
+    .navbar-nav .nav-link {
+      color: var(--navbar-text-color);
+    }
+
+    .dashboard {
+      background-color: var(--dashboard-background-color);
+      color: var(--dashboard-text-color);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    .card {
+      background-color: var(--card-background-color);
+      color: var(--card-text-color);
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+      background-color: transparent;
+      border-bottom: none;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .chat-box-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 350px;
+      max-height: 500px;
+      background-color: var(--chatbox-background-color);
+      border: 1px solid var(--chatbox-border-color);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-box {
+      padding: 20px;
+      height: 300px;
+      overflow-y: auto;
+    }
+
+    .user-message {
+      background-color: var(--user-message-background-color);
+      color: var(--user-message-text-color);
+      text-align: right;
+      border-radius: 15px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .bot-message {
+      background-color: var(--bot-message-background-color);
+      color: var(--bot-message-text-color);
+      text-align: left;
+      border-radius: 15px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .form-group {
+      padding: 10px;
+      border-top: 1px solid var(--chatbox-border-color);
+    }
+
+    .form-group textarea {
+      resize: none;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">FINCHAT AI DEMO</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Services</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <div class="dashboard">
+      <h1 class="mb-4">Dashboard</h1>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-header">Account Balance</div>
+            <div class="card-body">
+              <h2>$10,000.00</h2>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-header">Recent Transactions</div>
+            <div class="card-body">
+              <ul>
+                <li>Purchase at Amazon: $50.00</li>
+                <li>Withdrawal: $200.00</li>
+                <li>Deposit: $1,000.00</li>
+                <li>Albert Heijn: $1,000.00</li>
+                <li>Erasmus tuition: $3,000.00</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-header">Upcoming Bills</div>
+            <div class="card-body">
+              <ul>
+                <li>Electricity Bill: $75.00</li>
+                <li>Internet Bill: $60.00</li>
+                <li>Credit Card Payment: $300.00</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-header">Savings</div>
+            <div class="card-body">
+              <h2>$5,000.00</h2>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-header">Investments</div>
+            <div class="card-body">
+              <ul>
+                <li>Stocks: $2,500.00</li>
+                <li>Bonds: $1,000.00</li>
+                <li>Real Estate: $10,000.00</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-header">Financial Goals</div>
+            <div class="card-body">
+              <ul>
+                <li>Vacation: $2,000.00</li>
+                <li>New Car: $15,000.00</li>
+                <li>Emergency Fund: $10,000.00</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-header">Personal Info</div>
+            <div class="card-body">
+              <ul>
+                <li>Name: Henk Jan</li>
+                <li>Email: Henk.Jan@example.com</li>
+                <li>Phone: +1234567890</li>
+                <li>Address: 123 Hooftstraat, Oudlaan, ZH</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-header">Money In</div>
+            <div class="card-body">
+              <ul>
+                <li>Salary: $4,000.00</li>
+                <li>Bonus: $1,000.00</li>
+                <li>Investment Returns: $500.00</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-header">Money Out</div>
+            <div class="card-body">
+              <ul>
+                <li>Rent: $1,200.00</li>
+                <li>Groceries: $300.00</li>
+                <li>Utilities: $150.00</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    setInterval(highlightAll, 1000);
+    // Function to highlight code using highlight.js library
+    function highlightAll() {
+      document.querySelectorAll("pre code").forEach(block => {
+        hljs.highlightBlock(block);
+      });
+    }
+
+    const chatBox = document.querySelector(".chat-box");
+    const messageInput = document.querySelector("#message-input");
+    const sendBtn = document.querySelector("#send-btn");
+
+    function addMessage(message, isUserMessage) {
+      const messageDiv = document.createElement("div");
+
+      if (isUserMessage) {
+        messageDiv.classList.add("user-message");
+      } else {
+        messageDiv.classList.add("bot-message");
+      }
+
+      messageDiv.innerHTML = `<p>${message}</p>`;
+
+      chatBox.appendChild(messageDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function sendMessage() {
+      const message = messageInput.value.trim();
+
+      if (message !== "") {
+        addMessage(message, true);
+
+        fetch("/api", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message })
+        })
+        .then(response => response.json())
+        .then(data => {
+          messageInput.value = "";
+          const content = data.content;
+          addMessage(content, false);
+        })
+        .catch(error => console.error(error));
+      }
+    }
+
+    sendBtn.addEventListener("click", sendMessage);
+    messageInput.addEventListener("keydown", event => {
+      if (event.keyCode === 13 && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
+</body>
+
+</html>
