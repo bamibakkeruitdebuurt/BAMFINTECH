@@ -1,4 +1,4 @@
-# BAMFINTECH
+# BAM FINCHAT AI
 
 We work with with two files 1) index.html and 2) app.py
 
