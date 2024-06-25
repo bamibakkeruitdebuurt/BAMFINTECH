@@ -6,7 +6,7 @@ App.py is the chatbot which loads the HTMLS as source to provide reponses on a u
 
 Index.html is a personal bank dashboard.
 
-To run app.py, you need an OpenAI API key (make sure to insert it)
+To run app.py, you need an OpenAI API key (make sure to insert it in the env. file)
 
 Then:
 1) install: pip install -r requirements.txt
